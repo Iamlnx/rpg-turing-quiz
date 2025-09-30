@@ -8,7 +8,7 @@ Este projeto é um jogo de RPG no formato de quiz, com temática de computabilid
 
 - **Python**
 - **Pygame** (motor gráfico para jogos em Python)
-- **FastAPI** (backend para API e integração)
+- **Flask** (backend simples para API e integração)
 - **SQLite** (banco de dados leve e prático)
 - **Git & GitHub** (controle de versão e colaboração)
 - **Docker** (containerização para facilitar o deploy e execução)
@@ -42,16 +42,23 @@ Este projeto é um jogo de RPG no formato de quiz, com temática de computabilid
      ```
 
 5. **Executando sem Docker**
-   - Para rodar o backend FastAPI:
-     ```bash
-     uvicorn app.main:app --reload
-     ```
-   - Para rodar o jogo (interface gráfica com Pygame), execute o arquivo principal do jogo (exemplo):
-     ```bash
-     python game/main.py
-     ```
+         cd backend
+      python app.py
 
-> **Observação:** Os caminhos acima podem variar conforme a estrutura do projeto for evoluindo.
+      O backend estará disponível em: http://127.0.0.1:8000
+
+      Rotas disponíveis:
+      - GET `/health` → checa se o servidor está ativo
+      - GET `/launch` → cria partida/sessão
+      - POST `/score` → envia e registra pontuação
+
+6. **Executando o jogo**
+      cd ../game
+      python main.py
+
+      ** Observação: O backend precisa estar rodando antes de iniciar o jogo.
+
+
 
 ---
 
