@@ -1,22 +1,19 @@
+# backend/app/game/database.py
 import sqlite3
 import os
 
-# Caminho absoluto para o arquivo quiz.db dentro da pasta "game"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "quiz.db")
 
 def get_connection():
-    """Cria e retorna uma conexão com o banco de dados quiz.db"""
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
 def init_db():
-    """Cria todas as tabelas do banco de dados (caso não existam)"""
     conn = get_connection()
     cur = conn.cursor()
 
-    # Criação das tabelas
     cur.execute("""
     CREATE TABLE IF NOT EXISTS Jogador (
         id_jogador INTEGER PRIMARY KEY AUTOINCREMENT,

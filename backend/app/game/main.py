@@ -3,6 +3,7 @@ import requests
 import sys
 
 API_URL = "http://127.0.0.1:8000"
+AUTH_TOKEN = "123456"  # igual ao app.py
 
 pygame.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
@@ -17,15 +18,11 @@ GRAY = (200, 200, 200)
 font = pygame.font.SysFont(None, 32)
 big_font = pygame.font.SysFont(None, 48)
 
-# -------------------------------
-# Funções auxiliares
-# -------------------------------
 def draw_text(text, x, y, color=BLACK, font_obj=font):
     img = font_obj.render(text, True, color)
     screen.blit(img, (x, y))
 
 def wrap_text(text, x, y, max_width=700, line_height=30, color=BLACK):
-    """Quebra textos longos automaticamente"""
     words = text.split(" ")
     line = ""
     for word in words:
@@ -39,45 +36,52 @@ def wrap_text(text, x, y, max_width=700, line_height=30, color=BLACK):
     draw_text(line, x, y, color)
 
 def launch_game(player_name):
+    headers = {"Authorization": f"Bearer {AUTH_TOKEN}"}
+    params = {"nome": player_name}
     try:
-        response = requests.get(f"{API_URL}/launch?nome={player_name}")
+        response = requests.get(f"{API_URL}/launch", params=params, headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
+        else:
+            print("Erro /launch:", response.status_code, response.text)
     except Exception as e:
         print("Erro ao conectar com backend:", e)
     return None
 
 def send_score(id_partida, id_pergunta, answer_index):
+    headers = {"Authorization": f"Bearer {AUTH_TOKEN}"}
     data = {
         "id_partida": id_partida,
         "id_pergunta": id_pergunta,
         "answer": answer_index
     }
     try:
-        response = requests.post(f"{API_URL}/score", json=data)
+        response = requests.post(f"{API_URL}/score", json=data, headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
+        else:
+            print("Erro /score:", response.status_code, response.text)
     except Exception as e:
         print("Erro ao enviar resposta:", e)
     return None
 
 def get_results():
-    """Consulta o placar geral no backend"""
+    headers = {"Authorization": f"Bearer {AUTH_TOKEN}"}
     try:
-        response = requests.get(f"{API_URL}/results")
+        response = requests.get(f"{API_URL}/results", headers=headers, timeout=5)
         if response.status_code == 200:
             return response.json()
+        else:
+            print("Erro /results:", response.status_code, response.text)
     except Exception as e:
         print("Erro ao buscar resultados:", e)
     return []
 
-# -------------------------------
-# Loop principal
-# -------------------------------
+# Resto do loop do jogo (mantive seu código original para interface)
 def main():
     clock = pygame.time.Clock()
     running = True
-    state = "input_name"  # "input_name", "playing", "finished", "results"
+    state = "input_name"
     player_name = ""
     total_score = 0
     question_data = None
@@ -90,7 +94,6 @@ def main():
     while running:
         screen.fill(WHITE)
 
-        # --- ENTRAR NOME ---
         if state == "input_name":
             draw_text("Digite seu nome:", 200, 200, BLUE, big_font)
             draw_text(player_name + "|", 220, 260, BLACK, big_font)
@@ -118,7 +121,6 @@ def main():
                         if len(player_name) < 20 and event.unicode.isprintable():
                             player_name += event.unicode
 
-        # --- JOGANDO ---
         elif state == "playing":
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -135,8 +137,8 @@ def main():
                             selected_option
                         )
                         if result:
-                            total_score += result["points"]
-                            message = f"{result['result']} (+{result['points']} pts)"
+                            total_score += result.get("points", 0)
+                            message = f"{result.get('result','')} (+{result.get('points',0)} pts)"
 
                             question_count += 1
                             if question_count > max_questions:
@@ -161,8 +163,6 @@ def main():
                 draw_text(f"Pontuação: {total_score}", 50, 520, GRAY)
                 draw_text("Pressione R para ver resultados", 500, 20, GRAY)
 
-        # --- RESULTADOS ---
-                # --- RESULTADOS (PLACAR GERAL) ---
         elif state == "results":
             draw_text("🏆 Ranking Geral", 260, 50, BLUE, big_font)
             y = 120
@@ -171,7 +171,6 @@ def main():
                 draw_text("Nenhum resultado encontrado.", 250, 200, BLACK)
             else:
                 for row in results_data:
-                    # Novo formato vindo do backend agrupado por jogador
                     nome = row.get("nome", "Desconhecido")
                     pontos = row.get("total_pontos", 0)
                     partidas = row.get("partidas_jogadas", 0)
@@ -191,8 +190,6 @@ def main():
                     if event.key == pygame.K_RETURN:
                         state = "input_name"
 
-
-        # --- FIM DE JOGO ---
         elif state == "finished":
             draw_text(f"🏁 Fim de jogo, {player_name}!", 200, 200, BLUE, big_font)
             draw_text(f"Sua pontuação final: {total_score} pontos", 180, 260, BLACK, big_font)
