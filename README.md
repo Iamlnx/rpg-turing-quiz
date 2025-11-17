@@ -30,6 +30,7 @@ Este projeto é um jogo de RPG no formato de quiz, com temática de computabilid
 
 3. **Instale as dependências**
    ```bash
+   cd backend
    pip install -r requirements.txt
    ```
 
@@ -53,8 +54,23 @@ Este projeto é um jogo de RPG no formato de quiz, com temática de computabilid
       - POST `/score` → envia e registra pontuação
 
 6. **Executando o jogo**
-      cd ../game
-      python main.py
+
+   Em outro terminal:
+   
+      ```bash
+      cd rpg-turing-quiz
+      
+      python -m venv venv
+
+      source venv/bin/activate  # Linux/Mac
+      venv\Scripts\activate     # Windows
+
+      cd backend
+      
+      pip install -r requirements.txt
+
+      python app\main.py
+      ```
 
       ** Observação: O backend precisa estar rodando antes de iniciar o jogo.
 
