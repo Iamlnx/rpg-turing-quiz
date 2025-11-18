@@ -16,12 +16,14 @@ Este projeto é um jogo de RPG no formato de quiz, com temática de computabilid
 ## Como rodar localmente
 
 1. **Clone o repositório**
+
    ```bash
    git clone https://github.com/Iamlnx/rpg-turing-quiz.git
    cd rpg-turing-quiz
    ```
 
 2. **Crie e ative um ambiente virtual (opcional, mas recomendado)**
+
    ```bash
    python -m venv venv
    source venv/bin/activate  # Linux/Mac
@@ -29,12 +31,14 @@ Este projeto é um jogo de RPG no formato de quiz, com temática de computabilid
    ```
 
 3. **Instale as dependências**
+
    ```bash
    cd backend
    pip install -r requirements.txt
    ```
 
 4. **Rodando localmente com Docker**
+
    - Certifique-se de ter o Docker instalado.
    - Execute:
      ```bash
@@ -43,39 +47,42 @@ Este projeto é um jogo de RPG no formato de quiz, com temática de computabilid
      ```
 
 5. **Executando sem Docker**
-         cd backend
-      python app.py
+   cd backend
+   python app.py
 
-      O backend estará disponível em: http://127.0.0.1:8000
+   O backend estará disponível em: http://127.0.0.1:8000
 
-      Rotas disponíveis:
-      - GET `/health` → checa se o servidor está ativo
-      - GET `/launch` → cria partida/sessão
-      - POST `/score` → envia e registra pontuação
+   Rotas disponíveis:
+
+   - GET `/health` → checa se o servidor está ativo
+   - GET `/launch` → cria partida/sessão
+   - POST `/score` → envia e registra pontuação
 
 6. **Executando o jogo**
 
    Em outro terminal:
-   
-      ```bash
-      cd rpg-turing-quiz
-      
-      python -m venv venv
 
-      source venv/bin/activate  # Linux/Mac
-      venv\Scripts\activate     # Windows
+   ```bash
+   cd rpg-turing-quiz
 
-      cd backend
-      
-      pip install -r requirements.txt
+   python -m venv venv
 
-      python app\main.py
-      ```
+   source venv/bin/activate  # Linux/Mac
+   venv\Scripts\activate     # Windows
 
-      ** Observação: O backend precisa estar rodando antes de iniciar o jogo.
+   cd backend
 
+   pip install -r requirements.txt
 
+   python app\main.py
+   ```
+
+   \*\* Observação: O backend precisa estar rodando antes de iniciar o jogo.
 
 ---
 
 Sinta-se à vontade para contribuir e sugerir melhorias!
+
+## Vídeo de Apresentação
+
+https://www.youtube.com/watch?v=HrdlQ-2M_1U
